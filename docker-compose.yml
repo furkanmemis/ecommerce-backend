@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+
+  # ---------- PostgreSQL for Auth ----------
+  postgres-auth:
+    image: postgres:15
+    container_name: postgres-auth
+    environment:
+      POSTGRES_USER: authentication
+      POSTGRES_PASSWORD: authentication123
+      POSTGRES_DB: authentication
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+
+  # ---------- Authentication Service ----------
+  authentication:
+    build: ./authentication
+    container_name: authentication
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/authentication
+      SPRING_DATASOURCE_USERNAME: authentication
+      SPRING_DATASOURCE_PASSWORD: authentication123
+    depends_on:
+      - postgres-auth
+
+  # ---------- PostgreSQL for Stock ----------
+  postgres-stock:
+    image: postgres:15
+    container_name: postgres-stock
+    environment:
+      POSTGRES_USER: stock
+      POSTGRES_PASSWORD: stock123
+      POSTGRES_DB: stock   # DB ismi stock olarak değişti
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_stock_data:/var/lib/postgresql/data
+
+  # ---------- Stock Service ----------
+  stock:
+    build: ./stock
+    container_name: stock
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5432/stock
+      SPRING_DATASOURCE_USERNAME: stock
+      SPRING_DATASOURCE_PASSWORD: stock123
+    depends_on:
+      - postgres-stock
+
+volumes:
+  postgres_auth_data:
+  postgres_stock_data:

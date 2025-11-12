@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.authentication.models.User;
 import com.authentication.dto.LoginResponse;
 import com.authentication.dto.SignUpRequest;
-import java.util.UUID;
 
 @Service
 public class AuthService {

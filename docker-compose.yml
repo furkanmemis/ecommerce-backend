@@ -37,7 +37,7 @@ services:
       POSTGRES_PASSWORD: stock123
       POSTGRES_DB: stock   # DB ismi stock olarak değişti
     ports:
-      - "5433:5432"
+      - "5433:5433"
     volumes:
       - postgres_stock_data:/var/lib/postgresql/data
 
@@ -54,6 +54,33 @@ services:
     depends_on:
       - postgres-stock
 
+  # ---------- PostgreSQL for Notification ----------
+  postgres-notification:
+    image: postgres:15
+    container_name: postgres-notification
+    environment:
+      POSTGRES_USER: notification
+      POSTGRES_PASSWORD: notification123
+      POSTGRES_DB: notification
+    ports:
+      - "5434:5434"
+    volumes:
+      - postgres_notification_data:/var/lib/postgresql/data
+
+  # ---------- Notification Service ----------
+  notification:
+    build: ./notification
+    container_name: notification
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-notification:5432/notification
+      SPRING_DATASOURCE_USERNAME: notification
+      SPRING_DATASOURCE_PASSWORD: notification123
+    depends_on:
+      - postgres-notification
+
 volumes:
   postgres_auth_data:
   postgres_stock_data:
+  postgres_notification_data:

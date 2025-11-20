@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   # ---------- PostgreSQL for Auth ----------
@@ -14,6 +12,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_auth_data:/var/lib/postgresql/data
+    networks:
+      - app-net
 
   # ---------- Authentication Service ----------
   authentication:
@@ -27,6 +27,9 @@ services:
       SPRING_DATASOURCE_PASSWORD: authentication123
     depends_on:
       - postgres-auth
+    networks:
+      - kafka-net
+      - app-net
 
   # ---------- PostgreSQL for Stock ----------
   postgres-stock:
@@ -48,7 +51,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5432/stock
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5433/stock
       SPRING_DATASOURCE_USERNAME: stock
       SPRING_DATASOURCE_PASSWORD: stock123
     depends_on:
@@ -63,9 +66,11 @@ services:
       POSTGRES_PASSWORD: notification123
       POSTGRES_DB: notification
     ports:
-      - "5434:5434"
+      - "5434:5432"
     volumes:
       - postgres_notification_data:/var/lib/postgresql/data
+    networks:
+      - app-net
 
   # ---------- Notification Service ----------
   notification:
@@ -79,6 +84,38 @@ services:
       SPRING_DATASOURCE_PASSWORD: notification123
     depends_on:
       - postgres-notification
+    networks:
+      - kafka-net
+      - app-net
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-net
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "baeldung:1:1"
+    networks:
+    - kafka-net
+    
+networks:
+  kafka-net:
+    driver: bridge
+  app-net:
+    driver: bridge
+
 
 volumes:
   postgres_auth_data:

@@ -11,10 +11,12 @@ public class AuthService {
 
     private final UserService userService;
     private final JwtService jwtService;
+    private EmailService emailService;
 
-    public AuthService(UserService userService, JwtService jwtService) {
+    public AuthService(UserService userService, JwtService jwtService, EmailService emailService) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.emailService = emailService;
     }
 
     public LoginResponse Login(String email, String password) {
@@ -43,6 +45,8 @@ public class AuthService {
         if (createdUser == null) {
             throw new Exception("User signup error");
         }
+
+        this.emailService.sendMessage("email-notifications", createdUser.getId().toString(), createdUser.getEmail());
 
         return createdUser.getId().toString();
     }

@@ -109,6 +109,13 @@ services:
       KAFKA_CREATE_TOPICS: "baeldung:1:1"
     networks:
     - kafka-net
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - app-net
     
 networks:
   kafka-net:

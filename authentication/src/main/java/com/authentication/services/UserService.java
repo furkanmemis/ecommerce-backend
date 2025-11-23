@@ -17,7 +17,6 @@ public class UserService {
     }
 
     public User CreateUser(User user) {
-        System.out.println("Gelen user -> "+ user);
         return this.userRepository.save(user);
     }
 

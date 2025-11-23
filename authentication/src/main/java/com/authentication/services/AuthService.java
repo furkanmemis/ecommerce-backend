@@ -1,5 +1,6 @@
 package com.authentication.services;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.authentication.models.User;
@@ -19,9 +20,11 @@ public class AuthService {
         this.emailService = emailService;
     }
 
-    public LoginResponse Login(String email, String password) {
+    public LoginResponse Login(String email, String password) throws NoSuchAlgorithmException {
 
-        Optional<User> optionalUser = userService.findByEmailAndPassword(email, password);
+        String hashedPassword = EncryptionService.toHexString(EncryptionService.getSHA(password));
+
+        Optional<User> optionalUser = userService.findByEmailAndPassword(email, hashedPassword);
 
         if (optionalUser.isEmpty()) {
             throw new RuntimeException("Any user not found");
@@ -38,7 +41,7 @@ public class AuthService {
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(EncryptionService.toHexString(EncryptionService.getSHA(request.getPassword())));
 
         User createdUser = userService.CreateUser(user);
 

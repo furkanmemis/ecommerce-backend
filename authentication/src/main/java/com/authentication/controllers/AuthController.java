@@ -3,6 +3,9 @@ package com.authentication.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.authentication.services.AuthService;
+
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.authentication.dto.LoginRequest;
@@ -22,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(description = "Login with email and password")
-    public LoginResponse Login(@RequestBody LoginRequest request) {
+    public LoginResponse Login(@RequestBody LoginRequest request) throws NoSuchAlgorithmException {
         return authService.Login(request.getEmail(), request.getPassword());
     }
 

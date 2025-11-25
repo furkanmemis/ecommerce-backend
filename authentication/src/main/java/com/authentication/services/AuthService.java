@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.authentication.models.User;
 import com.authentication.dto.LoginResponse;
 import com.authentication.dto.SignUpRequest;
+import com.authentication.models.Role;
 
 @Service
 public class AuthService {
@@ -13,11 +14,13 @@ public class AuthService {
     private final UserService userService;
     private final JwtService jwtService;
     private EmailService emailService;
+    private final RoleService roleService;
 
-    public AuthService(UserService userService, JwtService jwtService, EmailService emailService) {
+    public AuthService(UserService userService, JwtService jwtService, EmailService emailService, RoleService roleService) {
         this.userService = userService;
         this.jwtService = jwtService;
         this.emailService = emailService;
+        this.roleService = roleService;
     }
 
     public LoginResponse Login(String email, String password) throws NoSuchAlgorithmException {
@@ -37,11 +40,20 @@ public class AuthService {
     }
 
     public String SignUp(SignUpRequest request) throws Exception {
+
+        Role userRole = roleService.GetRoleByName("customer");
+
+        if(userRole == null){
+            throw new Error("Sign up error, role not found");
+        }
+        
+        
         User user = new User();
         user.setName(request.getName());
         user.setSurname(request.getSurname());
         user.setEmail(request.getEmail());
         user.setPassword(EncryptionService.toHexString(EncryptionService.getSHA(request.getPassword())));
+        user.setRoleUuid(userRole.getId());
 
         User createdUser = userService.CreateUser(user);
 

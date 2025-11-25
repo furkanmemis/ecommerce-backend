@@ -34,6 +34,11 @@ public class User {
     @Column(name = "IsEmailVerify")
     private boolean isEmailVerify = false;
 
+    @Schema(description = "User role id", accessMode = Schema.AccessMode.READ_ONLY)
+    @Column(name = "RoleId")
+    private UUID roleUuid;
+    
+
     public User() {
     }
 
@@ -91,5 +96,13 @@ public class User {
 
     public void setIsEmailVerify(boolean value){
         this.isEmailVerify = value;
+    }
+
+    public UUID getRoleUuid(){
+        return this.roleUuid;
+    }
+
+    public void setRoleUuid(UUID id){
+        this.roleUuid = id;
     }
 }

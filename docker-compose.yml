@@ -30,6 +30,7 @@ services:
     networks:
       - kafka-net
       - app-net
+      - elk-net
 
   # ---------- PostgreSQL for Stock ----------
   postgres-stock:
@@ -87,6 +88,7 @@ services:
     networks:
       - kafka-net
       - app-net
+      - elk-net
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -116,11 +118,36 @@ services:
       - "8025:8025"
     networks:
       - app-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2-arm64
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - elk-net
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.2-arm64
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-net
     
 networks:
   kafka-net:
     driver: bridge
   app-net:
+    driver: bridge
+  elk-net:
     driver: bridge
 
 

@@ -8,15 +8,16 @@ import java.util.Collections;
 import java.util.Properties;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.SimpleMailMessage;
+import com.notification.models.Log;
 
 @Service
 public class EmailService {
 
     private KafkaConsumer<String, String> consumer;
     private JavaMailSender mailSender;
-  
+    private final LogService logService;
 
-    public EmailService(JavaMailSender mailSender) {
+    public EmailService(JavaMailSender mailSender, LogService logService) {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "group-1");
@@ -28,14 +29,18 @@ public class EmailService {
 
         this.consumer = new KafkaConsumer<>(props);
         this.mailSender = mailSender;
+        this.logService = logService;
     }
 
     public void SentMail(String to) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(to);
         mailMessage.setSubject("Test Mail");
-        mailMessage.setText("Hello! Welcome Ecommerce "+ to);
+        mailMessage.setText("Hello! Welcome Ecommerce " + to);
         mailSender.send(mailMessage);
+
+        Log log = new Log("email-sent", "email-service", "email sent to " + to);
+        logService.saveLog(log);
     }
 
     @PostConstruct
@@ -49,7 +54,7 @@ public class EmailService {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
                     SentMail(record.value());
-                    System.out.println("Email sent to "+ record.value());
+                    System.out.println("Email sent to " + record.value());
                 }
             }
         }).start();

@@ -87,6 +87,11 @@
 
 
 
+  <dependency>
+      <groupId>co.elastic.clients</groupId>
+      <artifactId>elasticsearch-java</artifactId>
+      <version>8.15.2</version>
+    </dependency>
 
 
 

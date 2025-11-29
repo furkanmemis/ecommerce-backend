@@ -15,7 +15,7 @@ public class Role {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    @Schema(description = "Unique user name", example = "customer")
+    @Schema(description = "Unique role name", example = "customer")
     private String name;
 
 

@@ -32,4 +32,12 @@ public class UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
+    public Optional<User> getByRoleId(UUID id){
+        return userRepository.findByRoleUuid(id);
+    }
+
+    public User createAdmin(User user){
+        return this.userRepository.save(user);
+    }
+
 }

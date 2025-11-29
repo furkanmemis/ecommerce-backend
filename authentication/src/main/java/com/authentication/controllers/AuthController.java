@@ -29,10 +29,16 @@ public class AuthController {
         return authService.Login(request.getEmail(), request.getPassword());
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign-up/customer")
     @Operation(description = "Sign up for your account")
-    public String SignUp(@RequestBody SignUpRequest request) throws Exception {
-        return authService.SignUp(request);
+    public String SignUpAsCustomer(@RequestBody SignUpRequest request) throws Exception {
+        return authService.SignUpAsCustomer(request);
+    }
+
+    @PostMapping("/sign-up/vendor")
+    @Operation(description = "Sign up for your account")
+    public String SignUpAsVendor(@RequestBody SignUpRequest request) throws Exception {
+        return authService.SignUpAsVendor(request);
     }
 
 }

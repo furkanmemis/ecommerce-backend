@@ -47,7 +47,7 @@ public class AuthService {
 
     }
 
-    public String SignUp(SignUpRequest request) throws Exception {
+    public String SignUpAsCustomer(SignUpRequest request) throws Exception {
 
         Role userRole = roleService.GetRoleByName("customer");
 
@@ -68,7 +68,36 @@ public class AuthService {
             throw new Exception("User signup error");
         }
 
-        Log log = new Log("create-user", "auth-service", user.getEmail() + " created");
+        Log log = new Log("create-customer", "auth-service", user.getEmail() + " created");
+        logService.saveLog(log);
+
+        this.emailService.sendMessage("email-notifications", createdUser.getId().toString(), createdUser.getEmail());
+
+        return createdUser.getId().toString();
+    }
+
+    public String SignUpAsVendor(SignUpRequest request) throws Exception {
+
+        Role userRole = roleService.GetRoleByName("vendor");
+
+        if (userRole == null) {
+            throw new Error("Sign up error, role not found");
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
+        user.setEmail(request.getEmail());
+        user.setPassword(EncryptionService.toHexString(EncryptionService.getSHA(request.getPassword())));
+        user.setRoleUuid(userRole.getId());
+
+        User createdUser = userService.CreateUser(user);
+
+        if (createdUser == null) {
+            throw new Exception("User signup error");
+        }
+
+        Log log = new Log("create-vendor", "auth-service", user.getEmail() + " created");
         logService.saveLog(log);
 
         this.emailService.sendMessage("email-notifications", createdUser.getId().toString(), createdUser.getEmail());

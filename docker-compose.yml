@@ -41,7 +41,7 @@ services:
       POSTGRES_PASSWORD: stock123
       POSTGRES_DB: stock   # DB ismi stock olarak değişti
     ports:
-      - "5433:5433"
+      - "5433:5432"
     volumes:
       - postgres_stock_data:/var/lib/postgresql/data
 
@@ -52,7 +52,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5433/stock
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5432/stock
       SPRING_DATASOURCE_USERNAME: stock
       SPRING_DATASOURCE_PASSWORD: stock123
     depends_on:

@@ -1,4 +1,4 @@
-package com.stock.stock.models;
+package com.stock.models;
 
 import jakarta.persistence.*;
 import java.util.UUID;

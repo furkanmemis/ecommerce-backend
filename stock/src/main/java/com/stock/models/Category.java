@@ -1,4 +1,4 @@
-package com.stock.stock.models;
+package com.stock.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

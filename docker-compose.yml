@@ -1,17 +1,17 @@
 services:
 
   # ---------- PostgreSQL for Auth ----------
-  postgres-auth:
+  postgres-ecommerce:
     image: postgres:15
-    container_name: postgres-auth
+    container_name: postgres-ecommerce
     environment:
-      POSTGRES_USER: authentication
-      POSTGRES_PASSWORD: authentication123
-      POSTGRES_DB: authentication
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce123
+      POSTGRES_DB: ecommerce
     ports:
       - "5432:5432"
     volumes:
-      - postgres_auth_data:/var/lib/postgresql/data
+      - postgres_ecommerce_data:/var/lib/postgresql/data
     networks:
       - app-net
 
@@ -22,28 +22,16 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/authentication
-      SPRING_DATASOURCE_USERNAME: authentication
-      SPRING_DATASOURCE_PASSWORD: authentication123
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-ecommerce:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: ecommerce
+      SPRING_DATASOURCE_PASSWORD: ecommerce123
     depends_on:
-      - postgres-auth
+      - postgres-ecommerce
     networks:
       - kafka-net
       - app-net
       - elk-net
 
-  # ---------- PostgreSQL for Stock ----------
-  postgres-stock:
-    image: postgres:15
-    container_name: postgres-stock
-    environment:
-      POSTGRES_USER: stock
-      POSTGRES_PASSWORD: stock123
-      POSTGRES_DB: stock   # DB ismi stock olarak değişti
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_stock_data:/var/lib/postgresql/data
 
   # ---------- Stock Service ----------
   stock:
@@ -52,26 +40,16 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-stock:5432/stock
-      SPRING_DATASOURCE_USERNAME: stock
-      SPRING_DATASOURCE_PASSWORD: stock123
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-ecommerce:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: ecommerce
+      SPRING_DATASOURCE_PASSWORD: ecommerce123
     depends_on:
-      - postgres-stock
-
-  # ---------- PostgreSQL for Notification ----------
-  postgres-notification:
-    image: postgres:15
-    container_name: postgres-notification
-    environment:
-      POSTGRES_USER: notification
-      POSTGRES_PASSWORD: notification123
-      POSTGRES_DB: notification
-    ports:
-      - "5434:5432"
-    volumes:
-      - postgres_notification_data:/var/lib/postgresql/data
+      - postgres-ecommerce
     networks:
+      - kafka-net
       - app-net
+      - elk-net
+
 
   # ---------- Notification Service ----------
   notification:
@@ -80,11 +58,11 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-notification:5432/notification
-      SPRING_DATASOURCE_USERNAME: notification
-      SPRING_DATASOURCE_PASSWORD: notification123
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-ecommerce:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: ecommerce
+      SPRING_DATASOURCE_PASSWORD: ecommerce123
     depends_on:
-      - postgres-notification
+      - postgres-ecommerce
     networks:
       - kafka-net
       - app-net
@@ -152,6 +130,4 @@ networks:
 
 
 volumes:
-  postgres_auth_data:
-  postgres_stock_data:
-  postgres_notification_data:
+  postgres_ecommerce_data:

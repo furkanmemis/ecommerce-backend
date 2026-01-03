@@ -26,7 +26,7 @@ public class Product {
     @Schema(description = "Product count")
     private Integer count = 0;
 
-    public Product(){}
+    public Product(Object object, String string, int i){}
 
     public Product(String name, Category category){
         this.name = name;

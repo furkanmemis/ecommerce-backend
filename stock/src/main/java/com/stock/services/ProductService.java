@@ -12,13 +12,17 @@ import java.util.List;
 public class ProductService {
     
     private final ProductRepository productRepository;
+    private final StockService stockService;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository, StockService stockService){
         this.productRepository = productRepository;
+        this.stockService = stockService;
     }
 
     public Product CreateProduct(Product product){
-        return productRepository.save(product);
+        Product saved = this.productRepository.save(product);
+        this.SendSocket();
+        return saved;
     }
 
     public Optional<Product> GetProductById(UUID id){
@@ -27,5 +31,10 @@ public class ProductService {
     
     public List<Product> GetAll(){
         return productRepository.findAll();
+    }
+
+    private void SendSocket(){
+        List<Product> products = this.GetAll();
+        this.stockService.pushStock(products);
     }
 }

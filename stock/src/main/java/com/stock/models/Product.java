@@ -22,7 +22,9 @@ public class Product {
     @Schema(description = "Product category")
     private Category category;
 
-    // getter & setter
+    @Column(nullable = false)
+    @Schema(description = "Product count")
+    private Integer count = 0;
 
     public Product(){}
 

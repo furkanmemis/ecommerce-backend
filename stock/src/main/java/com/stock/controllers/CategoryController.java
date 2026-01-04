@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,16 +27,19 @@ public class CategoryController {
     }
     
     @PostMapping("/create")
+    @Operation(description = "Create category")
     public Category CreateCategory(@RequestBody Category category){
         return this.categoryService.CreateCategory(category);
     }
 
     @GetMapping("/get-category/{id}")
+    @Operation(description = "Get category by id")
     public Optional<Category> getMethodName(@PathVariable UUID id) {
         return this.categoryService.GetCategoryById(id);
     }
 
     @GetMapping("/get-all")
+    @Operation(description = "Get all category")
     public List<Category> getMethodName() {
         return this.categoryService.GetAll();
     }

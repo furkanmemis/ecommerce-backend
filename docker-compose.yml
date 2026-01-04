@@ -15,7 +15,18 @@ services:
     networks:
       - app-net
 
-  # ---------- Authentication Service ----------
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - authentication
+      - stock
+      - notification
+    networks:
+      - app-net
+
   authentication:
     build: ./authentication
     container_name: authentication

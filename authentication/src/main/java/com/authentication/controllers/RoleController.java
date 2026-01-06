@@ -11,8 +11,10 @@ import java.util.Optional;
 import com.authentication.models.Role;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/api/role")
 public class RoleController {
 

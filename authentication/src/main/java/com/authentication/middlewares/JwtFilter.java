@@ -66,7 +66,8 @@ public class JwtFilter extends OncePerRequestFilter {
         return path.startsWith("/api/auth")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")
-                || path.startsWith("/public");
+                || path.startsWith("/public")
+                || path.startsWith("/health");
     }
 
 }

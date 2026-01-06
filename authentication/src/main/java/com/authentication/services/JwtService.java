@@ -6,6 +6,8 @@ import com.authentication.models.User;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -28,5 +30,16 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
+    }
+
+    public Claims validateAndDecodeToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) { 
+            throw new RuntimeException("JWT doğrulanamadı!", e);
+        }
     }
 }

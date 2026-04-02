@@ -2,26 +2,38 @@ package com.stock.services;
 
 import com.stock.repositories.ProductRepository;
 import java.util.Optional;
+
+import com.stock.models.Category;
 import com.stock.models.Product;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+import com.stock.dto.ProductCreate;
 
 @Service
 public class ProductService {
     
     private final ProductRepository productRepository;
     private final StockService stockService;
+    private final CategoryService categoryService;
 
-    public ProductService(ProductRepository productRepository, StockService stockService){
+    public ProductService(ProductRepository productRepository, StockService stockService, CategoryService categoryService){
         this.productRepository = productRepository;
         this.stockService = stockService;
+        this.categoryService = categoryService;
     }
 
-    public Product CreateProduct(Product product){
+    public Product CreateProduct(ProductCreate productCreate){
+        
+        Optional<Category> category = this.categoryService.GetCategoryById(UUID.fromString(productCreate.getCategoryId()));
+
+        if(category.isEmpty()){
+            throw new RuntimeException("Category not found");
+        }
+
+        Product product = new Product(productCreate.getName(), category.get());
+
         Product saved = this.productRepository.save(product);
-        this.SendSocket();
         return saved;
     }
 

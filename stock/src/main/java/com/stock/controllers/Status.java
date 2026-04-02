@@ -10,7 +10,7 @@ public class Status {
 
     @GetMapping("/health")
     public String health() {
-        return "Stock service running!";
+        return "Stock service running! v.1.0.0";
     }
     
 }

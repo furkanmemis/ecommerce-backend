@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import io.swagger.v3.oas.annotations.Operation;
+import com.stock.dto.ProductCreate;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ProductController {
 
     @PostMapping("/create")
     @Operation(description = "Create product")
-    public Product CreateProduct(@RequestBody Product product) {
+    public Product CreateProduct(@RequestBody ProductCreate product) {
         return this.productService.CreateProduct(product);
     }
 

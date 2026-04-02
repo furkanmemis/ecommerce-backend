@@ -1,0 +1,99 @@
+<svg width="1400" height="900" viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 30px Arial, sans-serif; fill: #13293d; }
+      .label { font: 600 18px Arial, sans-serif; fill: #13293d; }
+      .small { font: 500 15px Arial, sans-serif; fill: #3e5c76; }
+      .box { fill: #f7fbff; stroke: #3e5c76; stroke-width: 2; rx: 18; ry: 18; }
+      .gateway { fill: #d9f0ff; stroke: #0b6fa4; stroke-width: 3; }
+      .service { fill: #eef7e7; stroke: #4f772d; stroke-width: 2.5; }
+      .infra { fill: #fff4dc; stroke: #bc6c25; stroke-width: 2.5; }
+      .note { fill: #f5f1ff; stroke: #6c5ce7; stroke-width: 2; }
+      .arrow { stroke: #13293d; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+      .soft { stroke: #3e5c76; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 8 8; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#13293d"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="900" fill="#fcfdff"/>
+
+  <text x="50" y="55" class="title">Ecommerce Backend Flow</text>
+
+  <rect x="70" y="130" width="210" height="90" class="box"/>
+  <text x="175" y="168" text-anchor="middle" class="label">Client / Browser</text>
+  <text x="175" y="196" text-anchor="middle" class="small">Frontend or Swagger UI</text>
+
+  <rect x="360" y="120" width="250" height="110" class="box gateway"/>
+  <text x="485" y="165" text-anchor="middle" class="label">Gateway</text>
+  <text x="485" y="194" text-anchor="middle" class="small">:8080</text>
+
+  <rect x="710" y="70" width="250" height="110" class="box service"/>
+  <text x="835" y="115" text-anchor="middle" class="label">Authentication</text>
+  <text x="835" y="144" text-anchor="middle" class="small">Login + JWT</text>
+  <text x="835" y="170" text-anchor="middle" class="small">:8081</text>
+
+  <rect x="710" y="225" width="250" height="110" class="box service"/>
+  <text x="835" y="270" text-anchor="middle" class="label">Stock</text>
+  <text x="835" y="299" text-anchor="middle" class="small">Product + Category</text>
+  <text x="835" y="325" text-anchor="middle" class="small">:8082</text>
+
+  <rect x="710" y="380" width="250" height="110" class="box service"/>
+  <text x="835" y="425" text-anchor="middle" class="label">Notification</text>
+  <text x="835" y="454" text-anchor="middle" class="small">Health + Email</text>
+  <text x="835" y="480" text-anchor="middle" class="small">:8083</text>
+
+  <rect x="1080" y="90" width="220" height="90" class="box infra"/>
+  <text x="1190" y="128" text-anchor="middle" class="label">PostgreSQL</text>
+  <text x="1190" y="156" text-anchor="middle" class="small">shared database</text>
+
+  <rect x="1080" y="230" width="220" height="90" class="box infra"/>
+  <text x="1190" y="268" text-anchor="middle" class="label">Kafka</text>
+  <text x="1190" y="296" text-anchor="middle" class="small">event messaging</text>
+
+  <rect x="1080" y="370" width="220" height="90" class="box infra"/>
+  <text x="1190" y="408" text-anchor="middle" class="label">Mailhog</text>
+  <text x="1190" y="436" text-anchor="middle" class="small">email testing</text>
+
+  <rect x="1080" y="510" width="220" height="90" class="box infra"/>
+  <text x="1190" y="548" text-anchor="middle" class="label">Elasticsearch</text>
+  <text x="1190" y="576" text-anchor="middle" class="small">logs / search</text>
+
+  <rect x="120" y="360" width="360" height="210" class="box note"/>
+  <text x="300" y="402" text-anchor="middle" class="label">Protected Flow</text>
+  <text x="155" y="445" class="small">1. User logs in via Gateway</text>
+  <text x="155" y="480" class="small">2. Authentication returns JWT</text>
+  <text x="155" y="515" class="small">3. User sends Bearer token</text>
+  <text x="155" y="550" class="small">4. Gateway validates JWT</text>
+
+  <rect x="560" y="620" width="600" height="170" class="box note"/>
+  <text x="860" y="662" text-anchor="middle" class="label">Gateway URLs</text>
+  <text x="610" y="705" class="small">Swagger UI: /swagger-ui.html</text>
+  <text x="610" y="735" class="small">Login: POST /api/auth/login</text>
+  <text x="610" y="765" class="small">Stock: /api/product/** and /api/category/**</text>
+
+  <line x1="280" y1="175" x2="360" y2="175" class="arrow"/>
+
+  <line x1="610" y1="120" x2="710" y2="120" class="arrow"/>
+  <line x1="610" y1="175" x2="710" y2="280" class="arrow"/>
+  <line x1="610" y1="210" x2="710" y2="435" class="arrow"/>
+
+  <line x1="960" y1="125" x2="1080" y2="135" class="soft"/>
+  <line x1="960" y1="280" x2="1080" y2="275" class="soft"/>
+  <line x1="960" y1="430" x2="1080" y2="415" class="soft"/>
+
+  <line x1="960" y1="120" x2="1080" y2="545" class="soft dashed"/>
+  <line x1="960" y1="280" x2="1080" y2="135" class="soft dashed"/>
+  <line x1="960" y1="435" x2="1080" y2="135" class="soft dashed"/>
+
+  <line x1="835" y1="180" x2="835" y2="225" class="arrow dashed"/>
+
+  <text x="640" y="104" class="small">/api/auth/**</text>
+  <text x="620" y="255" class="small">JWT + /api/product/**</text>
+  <text x="620" y="458" class="small">/notification/health</text>
+
+  <text x="106" y="600" class="small">Only Gateway is exposed publicly</text>
+  <text x="106" y="625" class="small">Other services stay behind Gateway</text>
+</svg>

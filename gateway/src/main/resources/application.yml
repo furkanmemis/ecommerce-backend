@@ -8,12 +8,69 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: auth-service
+        - id: auth-service-api
           uri: http://authentication:8081
           predicates:
-            - Path=/api/auth/**,/api/role/**
+            - Path=/api/auth/**,/api/role/**,/api/user/**
 
-        - id: stock-service
+        - id: stock-service-api
           uri: http://stock:8082
           predicates:
-            - Path=/api/stock/**
+            - Path=/api/stock/**,/api/product/**,/api/category/**
+
+        - id: auth-service-health
+          uri: http://authentication:8081
+          predicates:
+            - Path=/auth/health
+          filters:
+            - SetPath=/health
+
+        - id: stock-service-health
+          uri: http://stock:8082
+          predicates:
+            - Path=/stock/health
+          filters:
+            - SetPath=/health
+
+        - id: notification-service-health
+          uri: http://notification:8083
+          predicates:
+            - Path=/notification/health
+          filters:
+            - SetPath=/health
+
+        - id: auth-service-docs
+          uri: http://authentication:8081
+          predicates:
+            - Path=/auth/v3/api-docs
+          filters:
+            - SetPath=/v3/api-docs
+
+        - id: stock-service-docs
+          uri: http://stock:8082
+          predicates:
+            - Path=/stock/v3/api-docs
+          filters:
+            - SetPath=/v3/api-docs
+
+        - id: notification-service-docs
+          uri: http://notification:8083
+          predicates:
+            - Path=/notification/v3/api-docs
+          filters:
+            - SetPath=/v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: gateway
+        url: /v3/api-docs
+      - name: authentication-service
+        url: /auth/v3/api-docs
+      - name: stock-service
+        url: /stock/v3/api-docs
+      - name: notification-service
+        url: /notification/v3/api-docs

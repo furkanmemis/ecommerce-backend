@@ -2,6 +2,9 @@ package com.stock.models;
 
 import jakarta.persistence.*;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
@@ -19,37 +22,39 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId", nullable = false)
-    @Schema(description = "Product category")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Category category;
 
     @Column(nullable = false)
     @Schema(description = "Product count")
     private Integer count = 0;
 
-    public Product(Object object, String string, int i){}
 
-    public Product(String name, Category category){
+    public Product() {
+    }
+
+    public Product(String name, Category category) {
         this.name = name;
         this.category = category;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public UUID getId(){
+    public UUID getId() {
         return this.id;
     }
 
-    public void setCategory(Category category){
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public Category getCategory(){
+    public Category getCategory() {
         return this.category;
     }
 }

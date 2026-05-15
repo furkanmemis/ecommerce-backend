@@ -3,6 +3,7 @@ package com.authentication.services;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.authentication.models.User;
 import com.authentication.dto.LoginResponse;
 import com.authentication.dto.SignUpRequest;
@@ -47,7 +48,12 @@ public class AuthService {
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String SignUpAsCustomer(SignUpRequest request) throws Exception {
+
+        if(userService.findByEmail(request.getEmail()).isPresent()){
+            throw new RuntimeException("Email already in use");
+        }
 
         Role userRole = roleService.GetRoleByName("customer");
 
@@ -76,7 +82,12 @@ public class AuthService {
         return createdUser.getId().toString();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String SignUpAsVendor(SignUpRequest request) throws Exception {
+
+        if(userService.findByEmail(request.getEmail()).isPresent()){
+            throw new RuntimeException("Email already in use");
+        }
 
         Role userRole = roleService.GetRoleByName("vendor");
 

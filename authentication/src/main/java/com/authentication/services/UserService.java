@@ -40,4 +40,8 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
 }

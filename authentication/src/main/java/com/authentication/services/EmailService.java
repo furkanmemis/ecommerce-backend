@@ -24,9 +24,9 @@ public class EmailService {
         this.producer = new KafkaProducer<>(props);
     }
 
-    public void sendMessage(String topic, String key, String value) {
+    public void sendMessage(String topic, String key, String value) throws Exception {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
-        producer.send(record);
+        producer.send(record).get();
         System.out.println("Sent: " + record.value());
     }
 
